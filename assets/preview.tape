@@ -61,10 +61,10 @@ Require linutil
 Require sh
 
 Set Shell "bash"
-Set FontSize 32
 Set FontFamily "JetBrainsMono Nerd Font"
-Set Width 3200
-Set Height 1800
+Set FontSize 38
+Set Width 1200
+Set Height 600
 
 Sleep 1s
 
