@@ -63,8 +63,8 @@ Require sh
 Set Shell "bash"
 Set FontFamily "JetBrainsMono Nerd Font"
 Set FontSize 38
-Set Width 1200
-Set Height 600
+Set Width 1920
+Set Height 1080
 
 Sleep 1s
 
