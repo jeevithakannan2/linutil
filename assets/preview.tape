@@ -67,7 +67,7 @@ Set Height 1800
 
 Sleep 1s
 
-Type "linutil -t compatible" Sleep 1s  Enter
+Type "linutil" Sleep 1s  Enter
 
 Sleep 5s
 
