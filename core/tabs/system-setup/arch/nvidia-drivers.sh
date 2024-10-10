@@ -53,10 +53,6 @@ setupHardwareAccelration() {
 
     "$ESCALATION_TOOL" "$PACKAGER" -S --needed --noconfirm libva-nvidia-driver
 
-    if "$PACKAGER" -Q | grep -q 'libva '; then
-        "$ESCALATION_TOOL" "$PACKAGER" -Rdd libva
-    fi
-
     mkdir -p "$HOME/linuxtoolbox"
     if [ -d "$LIBVA_DIR" ]; then
         rm -rf "$LIBVA_DIR"
