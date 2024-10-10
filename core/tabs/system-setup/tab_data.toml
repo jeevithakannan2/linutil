@@ -17,7 +17,7 @@ task_list = "SI D"
 
 [[data.entries]]
 name = "Nvidia Drivers && Hardware Accelration"
-description = "This script installs and configures nvidia drivers with Hardware Accelration"
+description = "This script installs and configures nvidia drivers with Hardware Accelration."
 script = "arch/nvidia-drivers.sh"
 task_list = "I FM RP SS"
 
