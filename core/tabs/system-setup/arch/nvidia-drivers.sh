@@ -14,15 +14,15 @@ installDeps() {
         printf "%b\n" "${CYAN}Installing headers for $kernel...${RC}"
         "$ESCALATION_TOOL" "$PACKAGER" -S --needed --noconfirm "$header"
     done
-
 }
 
 checkHardware() {
+    # Refer https://nouveau.freedesktop.org/CodeNames.html for model code names
     model=$(lspci -k | grep -A 2 -E "(VGA|3D)" | grep controller | cut -d ' ' -f 7 |  cut -c 1-2 )
     case "$model" in
         GM|GP|GV) return 1 ;;
         TU|GA|AD) return 0 ;;
-        *) printf "%b\n" "${RED}Your hardware is not supported." && exit 1 ;;
+        *) printf "%b\n" "${RED}Unsupported hardware." && exit 1 ;;
     esac
 }
 
@@ -40,13 +40,18 @@ enableNvidiaModeset() {
     else
         "$ESCALATION_TOOL" sed -i "/^GRUB_CMDLINE_LINUX_DEFAULT=/ s/\"$/ $PARAMETER\"/" /etc/default/grub
         printf "%b\n" "${CYAN}Added $PARAMETER to /etc/default/grub.${RC}"
-
         "$ESCALATION_TOOL" grub-mkconfig -o /boot/grub/grub.cfg
     fi
 }
 
-setupHardwareAccelration() {
+setupHardwareAcceleration() {
+    if ! command_exists grub-mkconfig; then
+        printf "%b\n" "${RED}Currently hardware acceleration is only available with GRUB.${RC}"
+        return;
+    fi
+
     modeset=$("$ESCALATION_TOOL" cat /sys/module/nvidia_drm/parameters/modeset)
+
     if [ ! "$modeset" = "Y" ]; then
         enableNvidiaModeset
     fi
@@ -70,18 +75,19 @@ setupHardwareAccelration() {
 
     printf "LIBVA_DRIVER_NAME=nvidia\nMOZ_DISABLE_RDD_SANDBOX=1" | "$ESCALATION_TOOL" tee -a /etc/environment > /dev/null
 
-    printf "%b\n" "${GREEN}Hardware Accelration setup completed successfully.${RC}"
+    printf "%b\n" "${GREEN}Hardware Acceleration setup completed successfully.${RC}"
     
-    if promptUser "enable hardware accelration in mpv player"; then
+    if promptUser "enable hardware Acceleration in mpv player"; then
         if [ -f "$HOME/.config/mpv/mpv.conf" ];then
             sed -i '/^hwdec/d' "$HOME/.config/mpv/mpv.conf"
         fi
         printf "hwdec=auto" | tee -a "$HOME/.config/mpv/mpv.conf" > /dev/null
-        printf "%b\n" "${GREEN}MPV Hardware Accelration enabled successfully.${RC}"
+        printf "%b\n" "${GREEN}MPV Hardware Acceleration enabled successfully.${RC}"
     fi
 }
 
 installDriver() {
+    # Refer https://wiki.archlinux.org/title/NVIDIA for open-dkms or dkms driver selection
     if checkHardware && promptUser "install nvidia's open source drivers"; then
         printf "%b\n" "${YELLOW}Installing nvidia open source driver...${RC}"
         installDeps
@@ -92,13 +98,9 @@ installDriver() {
         "$ESCALATION_TOOL" "$PACKAGER" -S --needed --noconfirm nvidia-dkms
     fi
 
-    if echo "$XDG_CURRENT_DESKTOP" | grep -q "GNOME"; then
-        "$ESCALATION_TOOL" systemctl enable nvidia-suspend.service nvidia-hibernate.service nvidia-resume.service
-    fi
-
     printf "%b\n" "${GREEN}Driver installed successfully.${RC}"
-    if command_exists grub-mkconfig && promptUser "setup hardware accelration"; then
-        setupHardwareAccelration
+    if promptUser "setup hardware Acceleration"; then
+        setupHardwareAcceleration
     fi
 
     printf "%b\n" "${GREEN}Please reboot your system for the changes to take effect.${RC}"
