@@ -63,7 +63,7 @@ setupHardwareAccelration() {
     fi
 
     printf "%b\n" "${YELLOW}Cloning libva from https://github.com/intel/libva in ${LIBVA_DIR}${RC}"
-    git clone https://github.com/intel/libva "$LIBVA_DIR"
+    git clone --branch=v2.22-branch --depth=1 https://github.com/intel/libva "$LIBVA_DIR"
 
     mkdir -p "$LIBVA_DIR/build"
     cd "$LIBVA_DIR/build" && arch-meson .. -Dwith_legacy=nvctrl && ninja
