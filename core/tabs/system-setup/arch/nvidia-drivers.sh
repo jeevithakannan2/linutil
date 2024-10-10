@@ -7,7 +7,7 @@ LIBVA_DIR="$HOME/linuxtoolbox/libva"
 installDeps() {
     "$ESCALATION_TOOL" "$PACKAGER" -S --needed --noconfirm base-devel dkms ninja meson
     
-    installed_kernels=$(pacman -Q | grep -E '^linux(| |-rt|-rt-lts|-hardened|-zen|-lts)[^-headers]' | cut -d ' ' -f 1)
+    installed_kernels=$("$PACKAGER" -Q | grep -E '^linux(| |-rt|-rt-lts|-hardened|-zen|-lts)[^-headers]' | cut -d ' ' -f 1)
 
     for kernel in $installed_kernels; do
         header="${kernel}-headers"
@@ -53,7 +53,7 @@ setupHardwareAccelration() {
 
     "$ESCALATION_TOOL" "$PACKAGER" -S --needed --noconfirm libva-nvidia-driver
 
-    if pacman -Q | grep -q 'libva '; then
+    if "$PACKAGER" -Q | grep -q 'libva '; then
         "$ESCALATION_TOOL" "$PACKAGER" -Rdd libva
     fi
 
