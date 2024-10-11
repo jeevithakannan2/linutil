@@ -77,7 +77,7 @@ setupHardwareAcceleration() {
 
     printf "%b\n" "${GREEN}Hardware Acceleration setup completed successfully.${RC}"
     
-    if promptUser "enable hardware Acceleration in mpv player"; then
+    if promptUser "enable Hardware Acceleration in MPV player"; then
         if [ -f "$HOME/.config/mpv/mpv.conf" ];then
             sed -i '/^hwdec/d' "$HOME/.config/mpv/mpv.conf"
         fi
@@ -99,7 +99,7 @@ installDriver() {
     fi
 
     printf "%b\n" "${GREEN}Driver installed successfully.${RC}"
-    if promptUser "setup hardware Acceleration"; then
+    if promptUser "setup Hardware Acceleration"; then
         setupHardwareAcceleration
     fi
 
