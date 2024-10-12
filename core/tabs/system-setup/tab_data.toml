@@ -19,7 +19,7 @@ task_list = "SI D"
 name = "Nvidia Drivers && Hardware Acceleration"
 description = "This script installs and configures nvidia drivers with Hardware Acceleration."
 script = "arch/nvidia-drivers.sh"
-task_list = "I FM"
+task_list = "I FM SS"
 
 [[data.entries]]
 name = "Paru AUR Helper"

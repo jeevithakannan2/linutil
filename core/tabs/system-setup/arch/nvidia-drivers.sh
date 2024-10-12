@@ -32,8 +32,8 @@ promptUser() {
     [ "$confirm" = "y" ] || [ "$confirm" = "Y" ]
 }
 
-enableNvidiaModeset() {
-    PARAMETER="nvidia-drm.modeset=1"
+setKernelParam() {
+    PARAMETER="$1"
 
     if grep -q "$PARAMETER" /etc/default/grub; then
         printf "%b\n" "${YELLOW}NVIDIA modesetting is already enabled in GRUB.${RC}"
@@ -48,12 +48,6 @@ setupHardwareAcceleration() {
     if ! command_exists grub-mkconfig; then
         printf "%b\n" "${RED}Currently hardware acceleration is only available with GRUB.${RC}"
         return;
-    fi
-
-    modeset=$("$ESCALATION_TOOL" cat /sys/module/nvidia_drm/parameters/modeset)
-
-    if [ ! "$modeset" = "Y" ]; then
-        enableNvidiaModeset
     fi
 
     "$ESCALATION_TOOL" "$PACKAGER" -S --needed --noconfirm libva-nvidia-driver
@@ -97,6 +91,10 @@ installDriver() {
         installDeps
         "$ESCALATION_TOOL" "$PACKAGER" -S --needed --noconfirm nvidia-dkms
     fi
+
+    # Refer https://wiki.archlinux.org/title/NVIDIA/Tips_and_tricks#Preserve_video_memory_after_suspend
+    setKernelParam "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
+    "$ESCALATION_TOOL" systemctl enable nvidia-suspend.service nvidia-hibernate.service nvidia-resume.service
 
     printf "%b\n" "${GREEN}Driver installed successfully.${RC}"
     if promptUser "setup Hardware Acceleration"; then
