@@ -18,7 +18,7 @@ installDeps() {
 
 checkHardware() {
     # Refer https://nouveau.freedesktop.org/CodeNames.html for model code names
-    model=$(lspci -k | grep -A 2 -E "(VGA|3D)" | grep controller | cut -d ' ' -f 7 |  cut -c 1-2 )
+    model=$(lspci -k | grep -A 2 -E "(VGA|3D)" | grep NVIDIA | sed 's/.*Corporation //;s/ .*//' | cut -c 1-2)
     case "$model" in
         GM|GP|GV) return 1 ;;
         TU|GA|AD) return 0 ;;
