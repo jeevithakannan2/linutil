@@ -37,6 +37,9 @@ struct Args {
     #[arg(help = "Set the theme to use in the application")]
     theme: Theme,
     #[arg(long, default_value_t = false)]
+    #[clap(help = "Allow linutil to run as root")]
+    allow_root: bool,
+    #[arg(long, default_value_t = false)]
     #[clap(help = "Show all available options, disregarding compatibility checks (UNSAFE)")]
     override_validation: bool,
 }
