@@ -9,7 +9,7 @@ installNgrok() {
         if [ -f "ngrok-v3-stable-linux-amd64.tgz" ]; then
             elevated_execution tar -xz -f ngrok-v3-stable-linux-amd64.tgz -C /usr/local/bin
         else
-            printf "%b\n" "${RED}Error occured when downloading.${RC}"
+            printf "%b\n" "${RED}Error occurred when downloading.${RC}"
             exit 1
         fi
     else
