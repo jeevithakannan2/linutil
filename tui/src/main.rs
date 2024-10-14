@@ -31,14 +31,17 @@ struct Args {
     #[arg(help = "Set the theme to use in the application")]
     theme: Theme,
     #[arg(long, default_value_t = false)]
+    #[clap(help = "Allow linutil to run as root")]
+    allow_root: bool,
+    #[arg(long, default_value_t = false)]
     #[clap(help = "Show all available options, disregarding compatibility checks (UNSAFE)")]
     override_validation: bool,
 }
 
 fn main() -> io::Result<()> {
-    if sudo::check() != sudo::RunningAs::User {
+    if sudo::check() != sudo::RunningAs::User && !Args::parse().allow_root {
         eprintln!("Error: This program is not intended to be run with elevated privileges.");
-        eprintln!("Please run this program as a regular user to ensure proper security and functionality.");
+        eprintln!("To bypass this restriction, use the '--allow-root' flag.");
         std::process::exit(1);
     }
 
