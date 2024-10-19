@@ -15,6 +15,11 @@ description = "This command installs a minimal arch server setup under 5 minutes
 script = "arch/server-setup.sh"
 task_list = "SI D"
 
+[[data.entries.preconditions]]
+matches = true
+data = "file_exists"
+values = ["/usr/lib/initcpio/hooks/archiso"]
+
 [[data.entries]]
 name = "Paru AUR Helper"
 description = "Paru is your standard pacman wrapping AUR helper with lots of features and minimal interaction.\nTo know more about AUR helpers visit: https://wiki.archlinux.org/title/AUR_helpers"

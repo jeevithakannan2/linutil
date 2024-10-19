@@ -129,6 +129,9 @@ impl Entry {
                         SystemDataType::CommandExists => values
                             .iter()
                             .all(|command| which::which(command).is_ok() == *matches),
+                        SystemDataType::FileExists => values
+                            .iter()
+                            .all(|path| Path::new(path).exists() == *matches),
                     }
                 },
             )
@@ -153,6 +156,8 @@ enum SystemDataType {
     File(PathBuf),
     #[serde(rename = "command_exists")]
     CommandExists,
+    #[serde(rename = "file_exists")]
+    FileExists,
 }
 
 fn filter_entries(entries: &mut Vec<Entry>) {
