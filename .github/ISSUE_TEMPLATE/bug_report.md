@@ -25,6 +25,12 @@ If applicable, add screenshots to help explain your problem.
 ## Additional context
 Add any other context about the problem here.
 
+## System
+Distribution: Your Linux Distribution
+Version and branch of linutil: Version can be found inside linutil. Branch (Stable/Dev).
+DE/WM: Gnome, Hyprland...
+Communication Protocol: X11/Wayland
+
 ## Checklist
 - [ ] I checked for duplicate issues.
 - [ ] I checked already existing discussions.
